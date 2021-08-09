@@ -12,7 +12,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 /**
- *
+ * The Render class for Active orders' buttons
  * @author MrUnknown404
  */
 public class ButtonRenderer extends JButton implements TableCellRenderer {

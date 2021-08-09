@@ -9,7 +9,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
- *
+ * The Editor class for description column of JTables with <code>DescriptionInputFrame</code> use
  * @author MrUnknown404
  */
 public class DescriptionColumnEditor extends DefaultCellEditor{
@@ -36,7 +36,7 @@ public class DescriptionColumnEditor extends DefaultCellEditor{
             textField.setBackground(table.getBackground());
         }
         
-        // вывод окна для воода описания
+        // output the frame of description modifying
         DescriptionInputFrame dialog = new DescriptionInputFrame((String)table.getValueAt(row,0)+" "+((table.getName().equals("Archieve"))?(String)table.getValueAt(row, 1):(String)table.getValueAt(row, 2)),
                                                             value == null ? "":getPlainTextFromFormatted(value.toString()), table.getName().equals("Archieve"));
         label = (value == null) ? "" : getFormattedText(value.toString());

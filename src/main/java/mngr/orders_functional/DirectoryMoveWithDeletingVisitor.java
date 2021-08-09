@@ -9,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- *  
+ *  A user who copies directories with attachments to a new path and deletes the old ones
  * @author MrUnknown404
  */
 public class DirectoryMoveWithDeletingVisitor extends SimpleFileVisitor<Path> {

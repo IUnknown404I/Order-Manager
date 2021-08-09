@@ -17,7 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 
 /**
- *
+ * The class for creating buttons in JTable
  * @author MrUnknown404
  */
 public class ButtonEditor extends DefaultCellEditor {

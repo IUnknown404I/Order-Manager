@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import mngr.orders_functional.DirectoryCopyVisitor;
 
 /**
- * Сlass with methods for working with a table and it's content
+ * Сlass with methods for working with a table and their content
  * @author MrUnknown404
  */
 public class TableMethods {
@@ -34,6 +34,7 @@ public class TableMethods {
     private static String lastFolderPath = "";
     private static TreeSet<String> listingSet;
     
+    // A consumer for deleting files by the input rows of the specified table
     protected static BiConsumer<Integer[], JTable> deletingFilesBiConsumer = (rows, tab) -> {
         Path pathToDelete = null;
         FileVisitor<Path> fileVisitorToDelete = new FileVisitor<Path>() {
@@ -80,6 +81,7 @@ public class TableMethods {
             }
         }
     };
+    // A consumer for deleting table rows
     protected static BiConsumer<Integer[], JTable> deletingRowBiConsumer = (rows, tab) -> {
         if (rows.length != 0) {
             for (int row : rows) {
@@ -108,7 +110,7 @@ public class TableMethods {
     }
     
     /**
-     * 
+     * Returns a valid file name format
      * @param toValidString
      * @return 
      */
@@ -121,7 +123,11 @@ public class TableMethods {
         }
         return validNameString;
     }
-    
+    /**
+     * returns distributed information of active orders' periods
+     * @param mainTab
+     * @return 
+     */
     public static String getMainTableNearestOrdersInfo(JTable mainTab) {
         int red = 0, yellow = 0, gray = 0;
 
@@ -136,7 +142,11 @@ public class TableMethods {
                "           Жёлтая зона: " + yellow +"\n"+
                "            Серая зона: " + gray   +"\n";
     }
-    
+    /**
+     * returns distributed information of archieved orders' periods
+     * @param archieveTab
+     * @return 
+     */
     public static String getArchieveTableDateInfo(JTable archieveTab) {
         int oneMonth = 0, twoMonth = 0, threeMonth = 0;
         
@@ -373,9 +383,15 @@ public class TableMethods {
     public static void getArchiveModifyErrorPane(){
         JOptionPane.showMessageDialog(null, "Объекты в архиве нельзя редактировать!","Ошибка", JOptionPane.ERROR_MESSAGE);
     }
+    /**
+     * Error output about attempting to duplicate order
+     */
     public static void getAlreadyExistsOrderPane(){
         JOptionPane.showMessageDialog(null, "Такой заказ уже существует!","Ошибка", JOptionPane.ERROR_MESSAGE);
     }
+    /**
+     * Error output indicating that another user is making changes at the current moment
+     */
     public static void getAvaibleErrorPane(){
         JOptionPane.showMessageDialog(null, "Другой пользователь вносит изменения в текущий момент!\n               "+
                                             "          Повторите попытку позже",
@@ -393,6 +409,11 @@ public class TableMethods {
         writer.close();
     }
     
+    /**
+     * The method that reads the root path should be called before initializing the program components
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static void loadConfig() throws FileNotFoundException, IOException {
         String configPath;
         try (FileReader fr = new FileReader("src\\rootPath.txt")) {
@@ -408,7 +429,11 @@ public class TableMethods {
         }
         rootPath = Path.of(configPath);
     }
-    
+    /**
+     * Checking the necessary directories and files when changing the root path.
+     * In case of non-compliance with the new path, copies from the old one or creates new ones
+     * @param newRootPath 
+     */
     public static void checkDirectoriesAfterRootChange(Path newRootPath) {
         try {
             ArrayList<Path> files = new ArrayList<>(); //get any files
@@ -514,7 +539,12 @@ public class TableMethods {
             Logger.getLogger(TableMethods.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+    /**
+     * Updates the configuration with the new root path
+     * @param newRootPath
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static void updateConfig(String newRootPath) throws FileNotFoundException, IOException {// mark .prop as *in using*
         setConfiguringAvaibleMark(false);
 
@@ -540,6 +570,15 @@ public class TableMethods {
         }
         setConfiguringAvaibleMark(true);
     }
+    
+    /**
+     * A method that updates the configuration when one or more orders in the tables are deleted
+     * @param returnDates 
+     * @param custumerStrings
+     * @param isArchieve
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static void deletingPropertyUpdate(String[] returnDates, String[] custumerStrings, boolean isArchieve) throws FileNotFoundException, IOException {
         String pathToProperties = getRootPath().toString()+"\\config\\archieve_cont.txt";
         if(!isArchieve)
@@ -578,6 +617,12 @@ public class TableMethods {
             }
         }
     }
+    /**
+     * Method that returns an access parameter for changing the program configuration
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static boolean isConfiguringAvaible() throws FileNotFoundException, IOException{
         // check avaibility
         String isAvaible = "";
@@ -588,6 +633,11 @@ public class TableMethods {
         }
         return isAvaible.split(" = ")[1].equals("true");
     }
+    /**
+     * A method that changes the current access state to change the program configuration to "available" or "not available"
+     * @param isAvaible
+     * @throws IOException 
+     */
     public static void setConfiguringAvaibleMark(boolean isAvaible) throws IOException {
         ArrayList<String> propText = new ArrayList<>();
         try (FileReader fileReader = new FileReader(getRootPath().toString()+"\\config\\om.txt")) {
@@ -615,6 +665,13 @@ public class TableMethods {
                 }
             }
     }
+    
+    /**
+     * Method that returns the access parameter for changing the configuration of orders
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static boolean isModifyingAvaible() throws FileNotFoundException, IOException{
         // check avaibility
         String isModifying = "";
@@ -625,6 +682,11 @@ public class TableMethods {
         }
         return isModifying.split(" = ")[1].equals("true");
     }
+    /**
+     * A method that changes the current access state to change the configuration of orders to "available" or "not available"
+     * @param isAvaible
+     * @throws IOException 
+     */
     public static void setModifyingAvaibleMark(boolean isAvaible) throws IOException {
         ArrayList<String> propText = new ArrayList<>();
         try (FileReader fileReader = new FileReader(getRootPath().toString()+"\\config\\om.txt")) {

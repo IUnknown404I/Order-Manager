@@ -15,10 +15,17 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * The class is used to populate tables with content and update information in configuration files
  * @author MrUnknown404
  */
 class DataFilling {
+    /**
+     * updating tables and configurations (files)
+     * @param mainTab MainTable JTable
+     * @param archieveTab Archieve JTable
+     * @throws IOException
+     * @throws FileNotFoundException 
+     */
     protected static void tableFilling(JTable mainTab, JTable archieveTab) throws IOException, FileNotFoundException {
         //clear tables
         ((DefaultTableModel) mainTab.getModel()).setRowCount(0);
@@ -147,7 +154,14 @@ class DataFilling {
             }
         }
     }
-    
+    /**
+     * Updating the current information in the configurations for the current orders in the table.
+     * Deleting unnecessary fields in files and updating new ones. <code>markingPropertyFiles</code> and
+     * <code>deleteMarkedPropertyFiles</code> used.
+     * @param mainTab MainTable JTable
+     * @param archieveTab Archieve JTable
+     * @throws IOException 
+     */
     protected static void actualPropertyInformationUpdate(JTable mainTab, JTable archieveTab) throws IOException {
         markingPropertyFiles(mainTab, TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt");
         markingPropertyFiles(archieveTab, TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt");
@@ -155,7 +169,13 @@ class DataFilling {
         deleteMarkedPropertyFiles(TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt");
         deleteMarkedPropertyFiles(TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt");
     }
-    
+    /**
+     * Marking unnecessary and relevant fields in configuration files
+     * @param table JTable for updating the information which
+     * @param pathToProperty Path to the conf file
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private static void markingPropertyFiles(JTable table, String pathToProperty) throws FileNotFoundException, IOException {
         //for actual 
         ArrayList<String> propText = new ArrayList<>();
@@ -191,6 +211,12 @@ class DataFilling {
         setPropText(Path.of(pathToProperty), propText);
     }
     
+    /**
+     * removing markers and outdated fields
+     * @param pathToProperty
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private static void deleteMarkedPropertyFiles(String pathToProperty) throws FileNotFoundException, IOException {
         ArrayList<String> propText = new ArrayList<>();
         FileReader reader = new FileReader(pathToProperty);
@@ -215,7 +241,13 @@ class DataFilling {
         }
         writer.close();
     }
-    
+    /**
+     * writing the configuration to the appropriate file
+     * @param toProp
+     * @param propText
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private static void setPropText(Path toProp, ArrayList<String> propText) throws FileNotFoundException, IOException {
         try ( FileWriter writer = new FileWriter(toProp.toString())) {
             for (String line : propText) {
@@ -223,6 +255,12 @@ class DataFilling {
             }
         }
     }
+    /**
+     * getting directories by the specified path
+     * @param toSearchArea
+     * @return
+     * @throws IOException 
+     */
     private static ArrayList<Path> getDirs(Path toSearchArea) throws IOException {
         ArrayList<Path> directories = new ArrayList<>();
             try (Stream<Path> paths = Files.walk(toSearchArea)) {

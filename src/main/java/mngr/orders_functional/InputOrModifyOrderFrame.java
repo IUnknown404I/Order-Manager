@@ -36,7 +36,7 @@ import javax.swing.text.MaskFormatter;
 import mngr.MainJFrame;
 
 /**
- *
+ * Window for creating and editing orders
  * @author MrUnknown404
  */
 public class InputOrModifyOrderFrame extends JFrame {
@@ -144,7 +144,7 @@ public class InputOrModifyOrderFrame extends JFrame {
     }
     
     private void createGUI(MainJFrame frame, JTable tab, int row){
-        // инициализация
+        // initialize
         mainPanel = new JPanel();
 //        mainPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         mainPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -274,7 +274,7 @@ public class InputOrModifyOrderFrame extends JFrame {
         downPanel.setSize(400,400);
         buttonPanel.setSize(150,50);
         
-        // настройка кнопок
+        // buttons config
         canselButton.addActionListener((ActionEvent e) -> { 
                 if (frame != null)
                     try { TableMethods.setModifyingAvaibleMark(true); }
@@ -388,8 +388,8 @@ public class InputOrModifyOrderFrame extends JFrame {
                 });
         }
         
-        // настройка лэйаутов
-        // панель с 0-2 столбцами
+        // layouts config
+        // the Panel with 0-2 columns
         javax.swing.GroupLayout upperPanelLayout = new javax.swing.GroupLayout(upperPanel);
         upperPanel.setLayout(upperPanelLayout);
         upperPanelLayout.setHorizontalGroup(
@@ -427,7 +427,7 @@ public class InputOrModifyOrderFrame extends JFrame {
                 .addGap(5, 5, 5))
         );
         
-        // панель с описанием
+        // the Panel with description
         javax.swing.GroupLayout downPanelLayout = new javax.swing.GroupLayout(downPanel);
         downPanel.setLayout(downPanelLayout);
         downPanelLayout.setHorizontalGroup(
@@ -449,7 +449,7 @@ public class InputOrModifyOrderFrame extends JFrame {
                 .addComponent(descriptionScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         
-        //панель с кнопками
+        // the Panel with buttons
         javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
         buttonPanel.setLayout(buttonPanelLayout);
         buttonPanelLayout.setHorizontalGroup(
@@ -475,7 +475,7 @@ public class InputOrModifyOrderFrame extends JFrame {
                     .addComponent(canselButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         
-        // основная панель
+        //  the main Panel
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -523,7 +523,6 @@ public class InputOrModifyOrderFrame extends JFrame {
                 .addContainerGap())
         );
         
-        // добавление элементов
 //        mainPanel.add(upperPanel);
 //        mainPanel.add(downPanel);
 //        mainPanel.add(buttonPanel);
@@ -585,6 +584,12 @@ public class InputOrModifyOrderFrame extends JFrame {
         } catch (ParseException ignored) {  }
     }
     
+    /**
+     * Updating configuration files when adding
+     * @param isArchieve
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private void creatingPropertyUpdate(boolean isArchieve) throws FileNotFoundException, IOException {
         String pathToProperties = TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt";
         ArrayList<String> propertiesText = new ArrayList<>();
@@ -605,6 +610,13 @@ public class InputOrModifyOrderFrame extends JFrame {
         }
     }
     
+    /**
+     * Updating configuration files when configuring
+     * @param id
+     * @param properties
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private void propertyConfigure(String id, String[] properties) throws FileNotFoundException, IOException {
         // .properties conf
         String pathToProperties = TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt";

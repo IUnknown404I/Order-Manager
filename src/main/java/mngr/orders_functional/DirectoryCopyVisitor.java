@@ -9,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- *
+ * A Visitor which copies directories with attachments to a new path
  * @author MrUnknown404
  */
 public class DirectoryCopyVisitor extends SimpleFileVisitor<Path> {

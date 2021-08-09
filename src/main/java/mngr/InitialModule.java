@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
- * Написать блоек для доюавлентя записи без директории корневоц 
+ * Initializing the application, launching the main window
  * @author MrUnknown404
  */
 public class InitialModule {

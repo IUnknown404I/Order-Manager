@@ -11,7 +11,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- *
+ * The Render class for Active orders' cells
  * @author MrUnknown404
  */
 public class MainTableRenderer extends DefaultTableCellRenderer {

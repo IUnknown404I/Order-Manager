@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import static javax.swing.SwingConstants.CENTER;
 
 /**
- *
+ * The Render class for Atchieve table
  * @author MrUnknown404
  */
 public class ArchiveTableRender extends DefaultTableCellRenderer {

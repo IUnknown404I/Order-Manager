@@ -5,7 +5,7 @@ import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
 /**
- *
+ * Information window
  * @author MrUnknown404
  */
 public class HelpFrame extends javax.swing.JFrame {

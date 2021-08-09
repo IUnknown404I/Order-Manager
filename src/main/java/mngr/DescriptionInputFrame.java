@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- *
+ * A window for viewing and changing the fields of the orders' description
  * @author MrUnknown404
  */
 public class DescriptionInputFrame extends JFrame{
@@ -150,7 +150,10 @@ public class DescriptionInputFrame extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    
+    /**
+     * Setting and updating the configuration file
+     * @param newDescription 
+     */
     private void propConfigure(String newDescription){
         //configure .prop
         String pathToProperties = TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt";
@@ -194,6 +197,7 @@ public class DescriptionInputFrame extends JFrame{
             Logger.getLogger(DescriptionInputFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     public static String getValue(){
         return "".equals(text)?null:text;
     }

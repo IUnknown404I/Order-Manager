@@ -77,12 +77,6 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             DataFilling.tableFilling(mainJTable, archieveJTable);
             updateInfo();
             
-            // check for om settings existing
-            TableMethods.loadConfig();
-        } catch (NoSuchFileException | FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдено всех нужных системных файлов!\n"
-                            + "Восстановите их перед началом работы или укажите новый корневой путь для работы!","Системное уведомление", JOptionPane.ERROR_MESSAGE);
-        }
         } catch (NoSuchFileException | FileNotFoundException ex) { Logger.getLogger(TableMethods.class.getName()).log(Level.SEVERE, null, ex); }
 
     }
@@ -201,20 +195,20 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
 
         // adjusting the width of the columns
         TableColumn column = mainJTable.getColumnModel().getColumn(4);
-        column.setMaxWidth(100);
-        column.setMinWidth(60);
+        column.setMaxWidth(120);
+        column.setMinWidth(40);
         column = mainJTable.getColumnModel().getColumn(3);
-        column.setMaxWidth(400);
-        column.setMinWidth(300);
+        column.setMaxWidth(750);
+        column.setMinWidth(150);
         column = mainJTable.getColumnModel().getColumn(0);
-        column.setMaxWidth(100);
-        column.setMinWidth(100);
+        column.setMaxWidth(250);
+        column.setMinWidth(50);
         column = mainJTable.getColumnModel().getColumn(1);
-        column.setMaxWidth(100);
-        column.setMinWidth(100);
+        column.setMaxWidth(250);
+        column.setMinWidth(50);
         column = mainJTable.getColumnModel().getColumn(2);
-        column.setMaxWidth(200);
-        column.setMinWidth(200);
+        column.setMaxWidth(500);
+        column.setMinWidth(80);
 
         // throw everything into the scroll and add it to toby-payne
         JScrollPane scroll = new JScrollPane(mainJTable);
@@ -301,17 +295,17 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
 
         // adjusting the width of the columns
         TableColumn column = archieveJTable.getColumnModel().getColumn(3);
-        column.setMaxWidth(100);
-        column.setMinWidth(60);
+        column.setMaxWidth(120);
+        column.setMinWidth(20);
         column = archieveJTable.getColumnModel().getColumn(2);
-        column.setMaxWidth(400);
-        column.setMinWidth(300);
+        column.setMaxWidth(800);
+        column.setMinWidth(150);
         column = archieveJTable.getColumnModel().getColumn(0);
-        column.setMaxWidth(100);
-        column.setMinWidth(100);
-        column = archieveJTable.getColumnModel().getColumn(1);
         column.setMaxWidth(250);
-        column.setMinWidth(200);
+        column.setMinWidth(60);
+        column = archieveJTable.getColumnModel().getColumn(1);
+        column.setMaxWidth(550);
+        column.setMinWidth(90);
 
         // throw everything into the scroll and add it to toby-payne
         JScrollPane scroll = new JScrollPane(archieveJTable);

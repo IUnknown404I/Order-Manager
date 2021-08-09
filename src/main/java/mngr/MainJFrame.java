@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mngr;
 
 import mngr.renders_and_editors.ButtonEditor;
@@ -32,6 +26,7 @@ import java.io.Serializable;
 import java.nio.file.FileSystemException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -69,13 +64,15 @@ import javax.swing.table.TableRowSorter;
 public class MainJFrame extends javax.swing.JFrame implements Serializable {
     public MainJFrame() throws IOException {
         try {
-            TableMethods.loadConfig();
             
             initComponents();
             initOtherComponents();
             DataFilling.tableFilling(mainJTable, archieveJTable);
             updateInfo();
-        } catch (FileNotFoundException ex) {
+            
+            // check for om settings existing
+            TableMethods.loadConfig();
+        } catch (NoSuchFileException | FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдено всех нужных системных файлов!\n"
                             + "Восстановите их перед началом работы или укажите новый корневой путь для работы!","Системное уведомление", JOptionPane.ERROR_MESSAGE);
         }
@@ -373,6 +370,10 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         inputRecord.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    TableMethods.loadConfig();
+                } catch (IOException ex) { return; }
+                
                 mainJTable.clearSelection();
                 archieveJTable.clearSelection();
                 

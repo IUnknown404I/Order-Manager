@@ -1,0 +1,1 @@
+jar cfm Mngr.jar Manifest.txt mngr.InitialModule

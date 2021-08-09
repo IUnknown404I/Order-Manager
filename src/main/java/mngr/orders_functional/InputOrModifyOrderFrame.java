@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr.orders_functional;
 
 import mngr.TableMethods;
@@ -41,7 +36,7 @@ import javax.swing.text.MaskFormatter;
 import mngr.MainJFrame;
 
 /**
- *
+ * Window for creating and editing orders
  * @author MrUnknown404
  */
 public class InputOrModifyOrderFrame extends JFrame {
@@ -68,7 +63,7 @@ public class InputOrModifyOrderFrame extends JFrame {
     
     /**
      * Displayed the window for adding an entry to the Main Table
-     * @param frame
+     * @param frame MainJFrame frame
      * @param tab the JTabel for adding an order
      */
     public InputOrModifyOrderFrame(MainJFrame frame, JTable tab){
@@ -93,7 +88,7 @@ public class InputOrModifyOrderFrame extends JFrame {
     }
     /**
      * Displayed the window for adding an entry to the Archieve Table
-     * @param frame
+     * @param frame MainJFrame frame
      * @param tab the JTabel for adding an order
      * @param isArchieveTab  the boolean, must be true for this constructor
      */
@@ -120,9 +115,9 @@ public class InputOrModifyOrderFrame extends JFrame {
     }
     /**
      * Displayed the window for modifying selected order from the Main Table
-     * @param frame
+     * @param frame MainJFrame frame
      * @param tab Main JTable
-     * @param row selected row
+     * @param row selected row for modifying option
      */
     public InputOrModifyOrderFrame(MainJFrame frame, JTable tab, int row){
         super("Редактирование записи");
@@ -148,8 +143,14 @@ public class InputOrModifyOrderFrame extends JFrame {
         setVisible(true);
     }
     
+    /**
+     * Creating the GUI of the frame
+     * @param frame MainJFrame frame
+     * @param tab current JTable
+     * @param row the row of selection for modifying option
+     */
     private void createGUI(MainJFrame frame, JTable tab, int row){
-        // инициализация
+        // initialize
         mainPanel = new JPanel();
 //        mainPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         mainPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -279,7 +280,7 @@ public class InputOrModifyOrderFrame extends JFrame {
         downPanel.setSize(400,400);
         buttonPanel.setSize(150,50);
         
-        // настройка кнопок
+        // buttons config
         canselButton.addActionListener((ActionEvent e) -> { 
                 if (frame != null)
                     try { TableMethods.setModifyingAvaibleMark(true); }
@@ -393,8 +394,8 @@ public class InputOrModifyOrderFrame extends JFrame {
                 });
         }
         
-        // настройка лэйаутов
-        // панель с 0-2 столбцами
+        // layouts config
+        // the Panel with 0-2 columns
         javax.swing.GroupLayout upperPanelLayout = new javax.swing.GroupLayout(upperPanel);
         upperPanel.setLayout(upperPanelLayout);
         upperPanelLayout.setHorizontalGroup(
@@ -432,7 +433,7 @@ public class InputOrModifyOrderFrame extends JFrame {
                 .addGap(5, 5, 5))
         );
         
-        // панель с описанием
+        // the Panel with description
         javax.swing.GroupLayout downPanelLayout = new javax.swing.GroupLayout(downPanel);
         downPanel.setLayout(downPanelLayout);
         downPanelLayout.setHorizontalGroup(
@@ -454,7 +455,7 @@ public class InputOrModifyOrderFrame extends JFrame {
                 .addComponent(descriptionScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         
-        //панель с кнопками
+        // the Panel with buttons
         javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
         buttonPanel.setLayout(buttonPanelLayout);
         buttonPanelLayout.setHorizontalGroup(
@@ -480,7 +481,7 @@ public class InputOrModifyOrderFrame extends JFrame {
                     .addComponent(canselButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         
-        // основная панель
+        //  the main Panel
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -528,7 +529,6 @@ public class InputOrModifyOrderFrame extends JFrame {
                 .addContainerGap())
         );
         
-        // добавление элементов
 //        mainPanel.add(upperPanel);
 //        mainPanel.add(downPanel);
 //        mainPanel.add(buttonPanel);
@@ -590,6 +590,12 @@ public class InputOrModifyOrderFrame extends JFrame {
         } catch (ParseException ignored) {  }
     }
     
+    /**
+     * Updating configuration files when adding
+     * @param isArchieve is Archieve JTable
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
+     */
     private void creatingPropertyUpdate(boolean isArchieve) throws FileNotFoundException, IOException {
         String pathToProperties = TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt";
         ArrayList<String> propertiesText = new ArrayList<>();
@@ -610,6 +616,13 @@ public class InputOrModifyOrderFrame extends JFrame {
         }
     }
     
+    /**
+     * Updating configuration files when configuring
+     * @param id the key of return date and customer's name with space between
+     * @param properties an array of new property lines to write
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
+     */
     private void propertyConfigure(String id, String[] properties) throws FileNotFoundException, IOException {
         // .properties conf
         String pathToProperties = TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt";
@@ -638,9 +651,8 @@ public class InputOrModifyOrderFrame extends JFrame {
                 }
             }
         }
-
-            try ( //writing
-                    FileWriter fileWriter = new FileWriter(pathToProperties)) {
+            //writing
+            try ( FileWriter fileWriter = new FileWriter(pathToProperties)) {
                 for (String line: propertiesText) {
                     line += "\r\n";
                     fileWriter.write(line);

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr.renders_and_editors;
 
 import java.awt.Color;
@@ -15,7 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import static javax.swing.SwingConstants.CENTER;
 
 /**
- *
+ * The Render class for Atchieve table
  * @author MrUnknown404
  */
 public class ArchiveTableRender extends DefaultTableCellRenderer {
@@ -55,6 +50,11 @@ public class ArchiveTableRender extends DefaultTableCellRenderer {
         return this;
     }
     
+    /**
+     * Getter for String of formatted text
+     * @param text the text to format
+     * @return formatted text
+     */
     private String getFormattedText(String text){
         String formattedText = text;
         return formattedText.replaceAll("\n", " \n");

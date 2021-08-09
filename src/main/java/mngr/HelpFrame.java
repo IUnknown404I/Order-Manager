@@ -9,6 +9,11 @@ import javax.swing.text.DefaultCaret;
  * @author MrUnknown404
  */
 public class HelpFrame extends javax.swing.JFrame {
+    /**
+     * Creating the information frame
+     * @param visualVar int oprion for needed case of information
+     * where 0 - main, 1 - menu, 2 - orders, 3 - errors, 4 - autofill 
+     */
     public HelpFrame(int visualVar) {
         initComponents();
         myInit();
@@ -20,6 +25,9 @@ public class HelpFrame extends javax.swing.JFrame {
     private JTextArea textField;
     private JScrollPane helpScrollPane;
     
+    /**
+     * Initial method
+     */
     private void myInit(){
         textField = new JTextArea();
         textField.setEditable(false);
@@ -44,6 +52,10 @@ public class HelpFrame extends javax.swing.JFrame {
         helpPanel.add(helpScrollPane);
         pack();
     }
+    /**
+     * Setter of the text in frame
+     * @param visualVar an int option of needed information
+     */
     private void infoTextSetUp(int visualVar) {
         String defaultVar = "        Менеджер состоит из панели меню, панель заказов и панели инструментов (где находятся кнопки и информационное окно).\n\n"
                 + "        На панели заказов имеется две вкладки: \"Текущие проекты\" и \"Архив\". Первая содержит выкладку по заказам в работе, активным; вторая - "

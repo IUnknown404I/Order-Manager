@@ -46,12 +46,24 @@ public class DirectoryCopyVisitor extends SimpleFileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
     
+    /**
+     * Getter for new Path
+     * @return new Path
+     */
     public Path getToPath() {
         return toPath;
     }
+    /**
+     * Getter for old Path
+     * @return the old Path
+     */
     public Path getFromPath() {
         return fromPath;
     }
+    /**
+     * Getter for StandardCopyOption
+     * @return current copy option
+     */
     public StandardCopyOption getCopyOption() {
         return copyOption;
     }

@@ -64,6 +64,11 @@ public class MainTableRenderer extends DefaultTableCellRenderer {
         return this;
     }
     
+    /**
+     * Getter for formatted text
+     * @param text text to format
+     * @return formatted text
+     */
     private String getFormattedText(String text){
         String formattedText = text;
         return formattedText.replaceAll("\n", " \n");

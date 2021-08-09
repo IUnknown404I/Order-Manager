@@ -63,7 +63,7 @@ public class InputOrModifyOrderFrame extends JFrame {
     
     /**
      * Displayed the window for adding an entry to the Main Table
-     * @param frame
+     * @param frame MainJFrame frame
      * @param tab the JTabel for adding an order
      */
     public InputOrModifyOrderFrame(MainJFrame frame, JTable tab){
@@ -88,7 +88,7 @@ public class InputOrModifyOrderFrame extends JFrame {
     }
     /**
      * Displayed the window for adding an entry to the Archieve Table
-     * @param frame
+     * @param frame MainJFrame frame
      * @param tab the JTabel for adding an order
      * @param isArchieveTab  the boolean, must be true for this constructor
      */
@@ -115,9 +115,9 @@ public class InputOrModifyOrderFrame extends JFrame {
     }
     /**
      * Displayed the window for modifying selected order from the Main Table
-     * @param frame
+     * @param frame MainJFrame frame
      * @param tab Main JTable
-     * @param row selected row
+     * @param row selected row for modifying option
      */
     public InputOrModifyOrderFrame(MainJFrame frame, JTable tab, int row){
         super("Редактирование записи");
@@ -143,6 +143,12 @@ public class InputOrModifyOrderFrame extends JFrame {
         setVisible(true);
     }
     
+    /**
+     * Creating the GUI of the frame
+     * @param frame MainJFrame frame
+     * @param tab current JTable
+     * @param row the row of selection for modifying option
+     */
     private void createGUI(MainJFrame frame, JTable tab, int row){
         // initialize
         mainPanel = new JPanel();
@@ -586,9 +592,9 @@ public class InputOrModifyOrderFrame extends JFrame {
     
     /**
      * Updating configuration files when adding
-     * @param isArchieve
-     * @throws FileNotFoundException
-     * @throws IOException 
+     * @param isArchieve is Archieve JTable
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
      */
     private void creatingPropertyUpdate(boolean isArchieve) throws FileNotFoundException, IOException {
         String pathToProperties = TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt";
@@ -612,10 +618,10 @@ public class InputOrModifyOrderFrame extends JFrame {
     
     /**
      * Updating configuration files when configuring
-     * @param id
-     * @param properties
-     * @throws FileNotFoundException
-     * @throws IOException 
+     * @param id the key of return date and customer's name with space between
+     * @param properties an array of new property lines to write
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
      */
     private void propertyConfigure(String id, String[] properties) throws FileNotFoundException, IOException {
         // .properties conf

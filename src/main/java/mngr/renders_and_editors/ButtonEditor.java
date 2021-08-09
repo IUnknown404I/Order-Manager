@@ -27,6 +27,10 @@ public class ButtonEditor extends DefaultCellEditor {
     private boolean isPushed;
     private final Color inactiveColor = Color.LIGHT_GRAY;
 
+    /**
+     * Generator of buttons for JTable
+     * @param checkBox new JCcheckBox
+     */
     public ButtonEditor(JCheckBox checkBox) {
         super(checkBox);
         

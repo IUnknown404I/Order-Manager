@@ -19,11 +19,6 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
     private static final Border IS_FOCUSED = new BevelBorder(1);
     private static final Border OUT_OF_FOCUS = new EmptyBorder(1, 1, 1, 1);
     
-    public ButtonRenderer(){
-//        setOpaque(true);
-//        setContentAreaFilled(true);
-    }
-    
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
                         boolean isSelected, boolean hasFocus, int row, int column){
@@ -57,6 +52,10 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
         return this;
     }
     
+    /**
+     * Back color setter
+     * @param isSelected boolean is thr row selected 
+     */
     public void setDefaultBackColor(boolean isSelected){
         if(isSelected)
             setBackground(Color.cyan);

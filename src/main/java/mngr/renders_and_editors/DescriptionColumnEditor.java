@@ -13,6 +13,10 @@ import javax.swing.JTextField;
  * @author MrUnknown404
  */
 public class DescriptionColumnEditor extends DefaultCellEditor{
+    /**
+     * The description cells editor for JTables
+     * @param textField  new JTextField
+     */
     public DescriptionColumnEditor(JTextField textField){
         super(textField);
         setClickCountToStart(2);
@@ -44,14 +48,25 @@ public class DescriptionColumnEditor extends DefaultCellEditor{
         return textField;
     }
     
+    /**
+     * Getter for formatted text
+     * @param text text to format
+     * @return formatted text
+     */
     private String getFormattedText(String text){
         String formattedText = text;
         return formattedText.replaceAll("\n", " \n");
     }
+    /**
+     * Getter for the plain text
+     * @param formattedText formatted text
+     * @return plain text
+     */
     private String getPlainTextFromFormatted(String formattedText){
         String plainText = formattedText;
         return plainText.replaceAll(" \n", "\n");
     }
+    
     @Override
     public int getClickCountToStart(){
         return 2;

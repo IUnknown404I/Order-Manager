@@ -50,6 +50,11 @@ public class ArchiveTableRender extends DefaultTableCellRenderer {
         return this;
     }
     
+    /**
+     * Getter for String of formatted text
+     * @param text the text to format
+     * @return formatted text
+     */
     private String getFormattedText(String text){
         String formattedText = text;
         return formattedText.replaceAll("\n", " \n");

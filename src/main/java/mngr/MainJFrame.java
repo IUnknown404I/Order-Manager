@@ -62,13 +62,17 @@ import javax.swing.table.TableRowSorter;
  * @author MrUnknown404
  */
 public class MainJFrame extends javax.swing.JFrame implements Serializable {
+    /**
+     * Do init for components
+     * @throws IOException for file errors
+     */
     public MainJFrame() throws IOException {
         try {
             // check for valid rootPath and db existing
             try {
                 TableMethods.loadConfig();
             } catch (NoSuchFileException | FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдены все нужныу системныу файлы!\n"
+            JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдены все нужные системные файлы!\n"
                             + "Восстановите их перед началом работы или укажите новый корневой путь для работы!","Системное уведомление", JOptionPane.ERROR_MESSAGE);
         }
             
@@ -80,6 +84,9 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         } catch (NoSuchFileException | FileNotFoundException ex) { Logger.getLogger(TableMethods.class.getName()).log(Level.SEVERE, null, ex); }
 
     }
+    /**
+     * init of tables, tabbed pane and menu
+     */
     private void initOtherComponents(){
         infoTextArea.setFont(new Font(inputRecord.getFont().getName(),Font.PLAIN, 13));
         
@@ -95,7 +102,9 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     private JTable archieveJTable;
     private String newPath = null;
 
-    // filling and design of the table, we put it in the scroll and add it to the palette
+    /**
+     * Filling and design of the Active order table, we put it in the scroll and add it to the palette
+     */
     private void setMainTable(){
         // initiate and configure the table
         mainJTable = new JTable();
@@ -216,7 +225,9 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sourceTabbedPane.addTab("  Текущие проекты  ", scroll);
     }
-    
+    /**
+     * filling and design of the Archieve table, we put it in the scroll and add it to the palette
+     */
     private void setArhieveTable(){
         // initiate and configure the table
         archieveJTable = new JTable();
@@ -975,27 +986,60 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     }
     
     // Getters and Setters are there
+    
+    /**
+     * Selection getter
+     * @return selected row
+     */
     protected int getMainTableSelectedRow() {
         return mainJTable.getSelectedRow();
     }
+    /**
+     * Getter of MainTable row count
+     * @return current count of rows
+     */
     protected int getMainTableRowCount() {
         return mainJTable.getRowCount();
     }
+    /**
+     * Getter of Archieve selection
+     * @return selected row
+     */
     protected int getArchieveTableSelectedRow() {
         return archieveJTable.getSelectedRow();
     }
+    /**
+     * Getter of ArchieveTable row count
+     * @return current count of rows
+     */
     protected int getArchieveTableRowCount() {
         return archieveJTable.getRowCount();
     }
+    /**
+     * Getter for text in the Info area
+     * @return the information text
+     */
     protected String getInfoText() {
         return infoTextArea.getText();
     }
+    /**
+     * Setter for text in the Info area
+     * @param text new Text to set in
+     */
     protected void setInfoText(String text) {
         infoTextArea.setText(text);
     }
+    /**
+     * Getter for TabbedPane
+     * @return current Tab
+     */
     protected int getCurrentTab() {
         return sourceTabbedPane.getSelectedIndex();
     }
+    /**
+     * Setter for TabbedPane
+     * @param mark new tab for the Pane
+     */
     protected void setCurrentTab(int mark) {
         sourceTabbedPane.setSelectedIndex(mark);
     }
@@ -1247,40 +1291,6 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new MainJFrame().setVisible(true);
-//            }
-//        });
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem autofillHelpMenuItem;

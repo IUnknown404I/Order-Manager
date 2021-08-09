@@ -23,8 +23,8 @@ class DataFilling {
      * updating tables and configurations (files)
      * @param mainTab MainTable JTable
      * @param archieveTab Archieve JTable
-     * @throws IOException
-     * @throws FileNotFoundException 
+     * @throws IOException for file errors
+     * @throws FileNotFoundException if file not found
      */
     protected static void tableFilling(JTable mainTab, JTable archieveTab) throws IOException, FileNotFoundException {
         //clear tables
@@ -160,7 +160,7 @@ class DataFilling {
      * <code>deleteMarkedPropertyFiles</code> used.
      * @param mainTab MainTable JTable
      * @param archieveTab Archieve JTable
-     * @throws IOException 
+     * @throws IOException for file errors
      */
     protected static void actualPropertyInformationUpdate(JTable mainTab, JTable archieveTab) throws IOException {
         markingPropertyFiles(mainTab, TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt");
@@ -173,8 +173,8 @@ class DataFilling {
      * Marking unnecessary and relevant fields in configuration files
      * @param table JTable for updating the information which
      * @param pathToProperty Path to the conf file
-     * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
      */
     private static void markingPropertyFiles(JTable table, String pathToProperty) throws FileNotFoundException, IOException {
         //for actual 
@@ -213,9 +213,9 @@ class DataFilling {
     
     /**
      * removing markers and outdated fields
-     * @param pathToProperty
-     * @throws FileNotFoundException
-     * @throws IOException 
+     * @param pathToProperty String path to config files
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
      */
     private static void deleteMarkedPropertyFiles(String pathToProperty) throws FileNotFoundException, IOException {
         ArrayList<String> propText = new ArrayList<>();
@@ -243,10 +243,10 @@ class DataFilling {
     }
     /**
      * writing the configuration to the appropriate file
-     * @param toProp
-     * @param propText
-     * @throws FileNotFoundException
-     * @throws IOException 
+     * @param toProp Path to config files
+     * @param propText the text that will be written in file
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
      */
     private static void setPropText(Path toProp, ArrayList<String> propText) throws FileNotFoundException, IOException {
         try ( FileWriter writer = new FileWriter(toProp.toString())) {
@@ -257,9 +257,9 @@ class DataFilling {
     }
     /**
      * getting directories by the specified path
-     * @param toSearchArea
-     * @return
-     * @throws IOException 
+     * @param toSearchArea Path to directory to search in
+     * @return ArrayList of directories Paths
+     * @throws IOException for file errors
      */
     private static ArrayList<Path> getDirs(Path toSearchArea) throws IOException {
         ArrayList<Path> directories = new ArrayList<>();

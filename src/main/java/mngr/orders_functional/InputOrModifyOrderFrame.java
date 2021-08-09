@@ -633,9 +633,8 @@ public class InputOrModifyOrderFrame extends JFrame {
                 }
             }
         }
-
-            try ( //writing
-                    FileWriter fileWriter = new FileWriter(pathToProperties)) {
+            //writing
+            try ( FileWriter fileWriter = new FileWriter(pathToProperties)) {
                 for (String line: propertiesText) {
                     line += "\r\n";
                     fileWriter.write(line);

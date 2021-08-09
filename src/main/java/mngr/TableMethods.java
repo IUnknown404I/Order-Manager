@@ -385,13 +385,17 @@ public class TableMethods {
     public static Path getRootPath(){
         return rootPath;
     }
-    public static void setRootPath(String newPath){
+    public static void setRootPath(String newPath) throws IOException{
         rootPath = Path.of(newPath);
+        
+        FileWriter writer = new FileWriter("src\\rootPath.txt");
+        writer.write("rootPath = " + rootPath);
+        writer.close();
     }
     
     public static void loadConfig() throws FileNotFoundException, IOException {
         String configPath;
-        try (FileReader fr = new FileReader(getRootPath().toString()+"\\config\\om.txt")) {
+        try (FileReader fr = new FileReader("src\\rootPath.txt")) {
             Scanner scan = new Scanner(fr);
             configPath = null;
             while (scan.hasNextLine()) {

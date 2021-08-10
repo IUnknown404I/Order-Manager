@@ -70,10 +70,25 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     public MainJFrame() throws IOException {
         try {
             TableMethods.loadConfig();
+            // check for valid rootPath in project src directory
+            try {
+                TableMethods.loadConfig();
+            } catch (NoSuchFileException | FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "        Отсутствует системный файл корневого пути!\n"
+                            + "   Восстановите его перед началом работы!","Системная ошибка", JOptionPane.ERROR_MESSAGE);
+            }
             
             initComponents();
             initOtherComponents();
-            DataFilling.tableFilling(mainJTable, archieveJTable);
+            
+            //loading orders from root directory
+            try {
+                DataFilling.tableFilling(mainJTable, archieveJTable);
+            } catch (NoSuchFileException | FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдены все нужные системные файлы!\n"
+                            + "Восстановите их перед началом работы или укажите новый корневой путь для работы!","Системное уведомление", JOptionPane.ERROR_MESSAGE);
+            }
+            
             updateInfo();
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдено всех нужных системных файлов!\n"
@@ -336,9 +351,9 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
                 archieveJTable.clearSelection();
                 
                 try {
+                    DataFilling.tableFilling(mainJTable, archieveJTable);
                     updateTable();
                     updateInfo();
-                    DataFilling.tableFilling(mainJTable, archieveJTable);
                 } 
                 catch (FileNotFoundException fnfex) {
                     Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, fnfex);
@@ -604,10 +619,10 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
 
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            if (   (file.getName(file.getNameCount() - 1).toString().equals("actual_cont.txt")||
+                            if (   (file.getName(file.getNameCount() - 1).toString().equals("actual_cont.txt")     ||
                                     file.getName(file.getNameCount() - 1).toString().equals("archieve_cont.txt"))  &&
-                                    file.getName(file.getNameCount() - 2).toString().equals("config")                     &&
-                                    file.getName(file.getNameCount() - 3).toString().equals("testdb"))
+                                    file.getName(file.getNameCount() - 2).toString().equals("config")              &&
+                                    file.getName(file.getNameCount() - 3).toString().equals(TableMethods.getRootPath().getName(TableMethods.getRootPath().getNameCount()-1).toString()))
                                 return FileVisitResult.CONTINUE;
                             
                             Files.delete(file);
@@ -683,8 +698,12 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
                     else
                         om = false;
                     
-                    if (!actual_cont && !archieve_cont && !om)
-                        JOptionPane.showMessageDialog(null, "В дампе не обнаружено всех резервных системных файлов!","Ошибка", JOptionPane.ERROR_MESSAGE);
+                    if (!(actual_cont && archieve_cont && om)) {
+                        TableMethods.checkDirectoriesAfterRootChange(TableMethods.getRootPath());
+                        
+                        JOptionPane.showMessageDialog(null, "        В дампе не обнаружено всех резервных системных файлов!\n"
+                                + "Недостающие данные были восстановлены пустыми, выполните обновление базы.","Ошибка", JOptionPane.ERROR_MESSAGE);
+                    }
                     else 
                         JOptionPane.showMessageDialog(null, "Восстановление системных файлов завершено!","Выполнено", JOptionPane.INFORMATION_MESSAGE);
                 } 

@@ -83,12 +83,12 @@ class DataFilling {
                         ((DefaultTableModel) mainTab.getModel()).addRow(new Object[]{returnDate, acceptDate, customer, description, null});
                     } else { //create new row and adding info abour the order to prop file
                         ((DefaultTableModel) mainTab.getModel()).addRow(new Object[]{dirName.split(" ")[0],
-                                    new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance().getTime()), dirName.split(" ")[1], "", null});
+                                    new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance().getTime()), dirName.substring(11), "", null});
                         
                         propText.add("id: " + dirName);
                         propText.add("return date: " + dirName.split(" ")[0]);
                         propText.add("accept date: " + new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance().getTime()));
-                        propText.add("customer: " + dirName.split(" ")[1]);
+                        propText.add("customer: " + dirName.substring(11));
                         propText.add("description: ");
                         setPropText(Path.of(TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt"), propText);
                     }
@@ -140,11 +140,11 @@ class DataFilling {
                     if (returnDate!=null&&customer!=null&&description!=null) {
                         ((DefaultTableModel) archieveTab.getModel()).addRow(new Object[]{returnDate, customer, description, null});
                     } else { //create new row and adding info abour the order to prop file
-                        ((DefaultTableModel) archieveTab.getModel()).addRow(new Object[]{dirName.split(" ")[0], dirName.split(" ")[1], "", null});
+                        ((DefaultTableModel) archieveTab.getModel()).addRow(new Object[]{dirName.split(" ")[0], dirName.substring(11), "", null});
                         
                         propText.add("id: " + dirName);
                         propText.add("return date: " + dirName.split(" ")[0]);
-                        propText.add("customer: " + dirName.split(" ")[1]);
+                        propText.add("customer: " + dirName.substring(11));
                         propText.add("description: ");
                         setPropText(Path.of(TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt"), propText);
                     }

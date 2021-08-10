@@ -25,6 +25,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
@@ -81,6 +82,8 @@ public class InputOrModifyOrderFrame extends JFrame {
             }
         });
         
+        ImageIcon icon = new ImageIcon("src//mod.png");
+        setIconImage(icon.getImage());
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         setFocusableWindowState(true);
@@ -108,6 +111,8 @@ public class InputOrModifyOrderFrame extends JFrame {
         });
         
         this.isArchieveTab = isArchieveTab;
+        ImageIcon icon = new ImageIcon("src//mod.png");
+        setIconImage(icon.getImage());
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         setFocusableWindowState(true);
@@ -137,6 +142,8 @@ public class InputOrModifyOrderFrame extends JFrame {
             }
         });
         
+        ImageIcon icon = new ImageIcon("src//mod.png");
+        setIconImage(icon.getImage());
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         setFocusableWindowState(true);
@@ -323,11 +330,12 @@ public class InputOrModifyOrderFrame extends JFrame {
                             creatingPropertyUpdate(isArchieveTab);
                             model.addRow(new Object[]{returnTextField.getText(), acceptTextField.getText(), custumerTextField.getText(), descriptionEditor.getText(), null});
                         } catch (IOException ex) { Logger.getLogger(InputOrModifyOrderFrame.class.getName()).log(Level.SEVERE, null, ex); }
+                        
+                        dispose();
                     }
                 }
                 
                 tab.clearSelection();
-                dispose();
             });
         }
         else { // modify

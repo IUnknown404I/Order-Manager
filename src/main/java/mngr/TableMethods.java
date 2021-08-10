@@ -440,17 +440,17 @@ public class TableMethods {
                             new DirectoryCopyVisitor(Path.of(getRootPath().toString()+"\\config\\dump"), Path.of(newRootPath.toString()+"\\config\\dump")));
                 
                 if (Files.exists(Path.of(getRootPath().toString()+"\\config\\actual_cont.txt")))
-                        Files.move(Path.of(getRootPath().toString()+"\\config\\actual_cont.txt"), Path.of(newRootPath.toString()+"\\config"));
+                        Files.copy(Path.of(getRootPath().toString()+"\\config\\actual_cont.txt"), Path.of(newRootPath.toString()+"\\config\\actual_cont.txt"));
                 else
                     Files.createFile(Path.of(newRootPath.toString()+"\\config\\actual_cont.txt"));
                 
                 if (Files.exists(Path.of(getRootPath().toString()+"\\config\\archieve_cont.txt")))
-                        Files.move(Path.of(getRootPath().toString()+"\\config\\archieve_cont.txt"), Path.of(newRootPath.toString()+"\\config"));
+                        Files.copy(Path.of(getRootPath().toString()+"\\config\\archieve_cont.txt"), Path.of(newRootPath.toString()+"\\config\\archieve_cont.txt"));
                 else
                     Files.createFile(Path.of(newRootPath.toString()+"\\config\\archieve_cont.txt"));
                 
                 if (Files.exists(Path.of(getRootPath().toString()+"\\config\\om.txt")))
-                        Files.move(Path.of(getRootPath().toString()+"\\config\\om.txt"), Path.of(newRootPath.toString()+"\\config"));
+                        Files.copy(Path.of(getRootPath().toString()+"\\config\\om.txt"), Path.of(newRootPath.toString()+"\\config\\om.txt"));
                 else {
                     Files.createFile(Path.of(newRootPath.toString()+"\\config\\om.txt"));
                     

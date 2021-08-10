@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr;
 
 import java.awt.Dimension;
@@ -28,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- *
+ * A window for viewing and changing the fields of the orders' description
  * @author MrUnknown404
  */
 public class DescriptionInputFrame extends JFrame{
@@ -42,6 +37,12 @@ public class DescriptionInputFrame extends JFrame{
     private String name = null;
     private boolean isArchieve = false;
     
+    /**
+     * Creating an Input frame for description
+     * @param name name of the frame
+     * @param context text of the description
+     * @param isArchieve boolean is Archieve 
+     */
     public DescriptionInputFrame(String name, String context, boolean isArchieve){
         super(name);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -63,6 +64,10 @@ public class DescriptionInputFrame extends JFrame{
         createGUI(context);
     }
     
+    /**
+     * Creating the GUI for the frame
+     * @param context description text
+     */
     private void createGUI(String context){
         main = new JPanel();
         main.setLayout(new BoxLayout(main,BoxLayout.Y_AXIS));
@@ -155,7 +160,10 @@ public class DescriptionInputFrame extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    
+    /**
+     * Setting and updating the configuration file
+     * @param newDescription new Text for description editor
+     */
     private void propConfigure(String newDescription){
         //configure .prop
         String pathToProperties = TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt";
@@ -199,9 +207,18 @@ public class DescriptionInputFrame extends JFrame{
             Logger.getLogger(DescriptionInputFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * Getter for text Editor's text
+     * @return String text
+     */
     public static String getValue(){
         return "".equals(text)?null:text;
     }
+    /**
+     * Setter for text Editor's text
+     * @param text new Text
+     */
     protected static void setValue(String text){
         DescriptionInputFrame.text = text;
     }

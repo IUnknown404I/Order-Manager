@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr;
 
 import java.io.FileNotFoundException;
@@ -20,10 +15,17 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * The class is used to populate tables with content and update information in configuration files
  * @author MrUnknown404
  */
 class DataFilling {
+    /**
+     * updating tables and configurations (files)
+     * @param mainTab MainTable JTable
+     * @param archieveTab Archieve JTable
+     * @throws IOException for file errors
+     * @throws FileNotFoundException if file not found
+     */
     protected static void tableFilling(JTable mainTab, JTable archieveTab) throws IOException, FileNotFoundException {
         //clear tables
         ((DefaultTableModel) mainTab.getModel()).setRowCount(0);
@@ -152,7 +154,14 @@ class DataFilling {
             }
         }
     }
-    
+    /**
+     * Updating the current information in the configurations for the current orders in the table.
+     * Deleting unnecessary fields in files and updating new ones. <code>markingPropertyFiles</code> and
+     * <code>deleteMarkedPropertyFiles</code> used.
+     * @param mainTab MainTable JTable
+     * @param archieveTab Archieve JTable
+     * @throws IOException for file errors
+     */
     protected static void actualPropertyInformationUpdate(JTable mainTab, JTable archieveTab) throws IOException {
         markingPropertyFiles(mainTab, TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt");
         markingPropertyFiles(archieveTab, TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt");
@@ -160,7 +169,13 @@ class DataFilling {
         deleteMarkedPropertyFiles(TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt");
         deleteMarkedPropertyFiles(TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt");
     }
-    
+    /**
+     * Marking unnecessary and relevant fields in configuration files
+     * @param table JTable for updating the information which
+     * @param pathToProperty Path to the conf file
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
+     */
     private static void markingPropertyFiles(JTable table, String pathToProperty) throws FileNotFoundException, IOException {
         //for actual 
         ArrayList<String> propText = new ArrayList<>();
@@ -196,6 +211,12 @@ class DataFilling {
         setPropText(Path.of(pathToProperty), propText);
     }
     
+    /**
+     * removing markers and outdated fields
+     * @param pathToProperty String path to config files
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
+     */
     private static void deleteMarkedPropertyFiles(String pathToProperty) throws FileNotFoundException, IOException {
         ArrayList<String> propText = new ArrayList<>();
         FileReader reader = new FileReader(pathToProperty);
@@ -220,7 +241,13 @@ class DataFilling {
         }
         writer.close();
     }
-    
+    /**
+     * writing the configuration to the appropriate file
+     * @param toProp Path to config files
+     * @param propText the text that will be written in file
+     * @throws FileNotFoundException if file not found
+     * @throws IOException for file errors
+     */
     private static void setPropText(Path toProp, ArrayList<String> propText) throws FileNotFoundException, IOException {
         try ( FileWriter writer = new FileWriter(toProp.toString())) {
             for (String line : propText) {
@@ -228,6 +255,12 @@ class DataFilling {
             }
         }
     }
+    /**
+     * getting directories by the specified path
+     * @param toSearchArea Path to directory to search in
+     * @return ArrayList of directories Paths
+     * @throws IOException for file errors
+     */
     private static ArrayList<Path> getDirs(Path toSearchArea) throws IOException {
         ArrayList<Path> directories = new ArrayList<>();
             try (Stream<Path> paths = Files.walk(toSearchArea)) {

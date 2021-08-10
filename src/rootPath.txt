@@ -1,1 +1,1 @@
-rootPath = D:\Soft\NetBeans-12.4\beansfold\DB FINAL
+rootPath = D:\Soft\NetBeans-12.4\beansfold\DB

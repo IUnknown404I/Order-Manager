@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mngr;
 
 import mngr.renders_and_editors.ButtonEditor;
@@ -32,6 +26,7 @@ import java.io.Serializable;
 import java.nio.file.FileSystemException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -63,10 +58,14 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
- *
+ *  The class of the main window. Contains visualization methods and component settings.
  * @author MrUnknown404
  */
 public class MainJFrame extends javax.swing.JFrame implements Serializable {
+    /**
+     * Do init for components
+     * @throws IOException for file errors
+     */
     public MainJFrame() throws IOException {
         try {
             TableMethods.loadConfig();
@@ -77,6 +76,13 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
                 JOptionPane.showMessageDialog(null, "        Отсутствует системный файл корневого пути!\n"
                             + "   Восстановите его перед началом работы!","Системная ошибка", JOptionPane.ERROR_MESSAGE);
             }
+            // check for valid rootPath and db existing
+            try {
+                TableMethods.loadConfig();
+            } catch (NoSuchFileException | FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдены все нужные системные файлы!\n"
+                            + "Восстановите их перед началом работы или укажите новый корневой путь для работы!","Системное уведомление", JOptionPane.ERROR_MESSAGE);
+        }
             
             initComponents();
             initOtherComponents();
@@ -90,12 +96,13 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             }
             
             updateInfo();
-        } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдено всех нужных системных файлов!\n"
-                            + "Восстановите их перед началом работы или укажите новый корневой путь для работы!","Системное уведомление", JOptionPane.ERROR_MESSAGE);
-        }
+            
+        } catch (NoSuchFileException | FileNotFoundException ex) { Logger.getLogger(TableMethods.class.getName()).log(Level.SEVERE, null, ex); }
 
     }
+    /**
+     * init of tables, tabbed pane and menu
+     */
     private void initOtherComponents(){
         infoTextArea.setFont(new Font(inputRecord.getFont().getName(),Font.PLAIN, 13));
         
@@ -111,9 +118,11 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     private JTable archieveJTable;
     private String newPath = null;
 
-    // заполнение и дезигн таблицы, вкладываем её в скролл и  его добавляем к палетке
+    /**
+     * Filling and design of the Active order table, we put it in the scroll and add it to the palette
+     */
     private void setMainTable(){
-        // инициирую и настраиваю таблицу
+        // initiate and configure the table
         mainJTable = new JTable();
         mainJTable.setName("MainTable");
         mainJTable.addFocusListener(new FocusListener(){
@@ -174,7 +183,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             }
         });
         
-        // задаём сортировку таблицы
+        // setting the table sorting
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(mainJTable.getModel());
         sorter.setSortable(4, false);
         sorter.setComparator(0, new Comparator<String>() {
@@ -203,38 +212,40 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         ((DefaultTableCellRenderer)mainJTable.getTableHeader().getDefaultRenderer())
                                         .setHorizontalAlignment(JLabel.CENTER);
 
-        // задаю рендеры и едиторы
+        // set renderers and editors
         mainJTable.setDefaultRenderer(Object.class, new MainTableRenderer());
         mainJTable.getColumn("Директория").setCellRenderer(new ButtonRenderer());
         mainJTable.getColumn("Директория").setCellEditor(new ButtonEditor(new JCheckBox()));
         mainJTable.getColumn("Описание").setCellEditor(new DescriptionColumnEditor(new JTextField()));
 
-        // настраиваю ширину столбцов
+        // adjusting the width of the columns
         TableColumn column = mainJTable.getColumnModel().getColumn(4);
-        column.setMaxWidth(100);
-        column.setMinWidth(60);
+        column.setMaxWidth(120);
+        column.setMinWidth(40);
         column = mainJTable.getColumnModel().getColumn(3);
-        column.setMaxWidth(400);
-        column.setMinWidth(300);
+        column.setMaxWidth(750);
+        column.setMinWidth(150);
         column = mainJTable.getColumnModel().getColumn(0);
-        column.setMaxWidth(100);
-        column.setMinWidth(100);
+        column.setMaxWidth(250);
+        column.setMinWidth(50);
         column = mainJTable.getColumnModel().getColumn(1);
-        column.setMaxWidth(100);
-        column.setMinWidth(100);
+        column.setMaxWidth(250);
+        column.setMinWidth(50);
         column = mainJTable.getColumnModel().getColumn(2);
-        column.setMaxWidth(200);
-        column.setMinWidth(200);
+        column.setMaxWidth(500);
+        column.setMinWidth(80);
 
-        // кидаю всё в скролл и его добавляю к таббид-пейну
+        // throw everything into the scroll and add it to toby-payne
         JScrollPane scroll = new JScrollPane(mainJTable);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sourceTabbedPane.addTab("  Текущие проекты  ", scroll);
     }
-    
+    /**
+     * filling and design of the Archieve table, we put it in the scroll and add it to the palette
+     */
     private void setArhieveTable(){
-        // инициирую и настраиваю таблицу
+        // initiate and configure the table
         archieveJTable = new JTable();
         archieveJTable.setName("Archieve");
         archieveJTable.addFocusListener(new FocusListener(){
@@ -274,7 +285,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             }
         });
 
-        // задаём сортировку таблицы
+        // setting the table sorting
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(archieveJTable.getModel());
         sorter.setSortable(3, false);
         sorter.setComparator(0, new Comparator<String>() {
@@ -303,27 +314,27 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         ((DefaultTableCellRenderer)archieveJTable.getTableHeader().getDefaultRenderer())
                                         .setHorizontalAlignment(JLabel.CENTER);
 
-        // задаю рендеры и едиторы
+        // set renderers and editors
         archieveJTable.setDefaultRenderer(Object.class, new ArchiveTableRender());
         archieveJTable.getColumn("Директория").setCellRenderer(new ArchiveTableButtonRender());
         archieveJTable.getColumn("Директория").setCellEditor(new ButtonEditor(new JCheckBox()));
         archieveJTable.getColumn("Описание").setCellEditor(new DescriptionColumnEditor(new JTextField()));
 
-        // настраиваю ширину столбцов
+        // adjusting the width of the columns
         TableColumn column = archieveJTable.getColumnModel().getColumn(3);
-        column.setMaxWidth(100);
-        column.setMinWidth(60);
+        column.setMaxWidth(120);
+        column.setMinWidth(20);
         column = archieveJTable.getColumnModel().getColumn(2);
-        column.setMaxWidth(400);
-        column.setMinWidth(300);
+        column.setMaxWidth(800);
+        column.setMinWidth(150);
         column = archieveJTable.getColumnModel().getColumn(0);
-        column.setMaxWidth(100);
-        column.setMinWidth(100);
-        column = archieveJTable.getColumnModel().getColumn(1);
         column.setMaxWidth(250);
-        column.setMinWidth(200);
+        column.setMinWidth(60);
+        column = archieveJTable.getColumnModel().getColumn(1);
+        column.setMaxWidth(550);
+        column.setMinWidth(90);
 
-        // кидаю всё в скролл и его добавляю к таббид-пейну
+        // throw everything into the scroll and add it to toby-payne
         JScrollPane scroll = new JScrollPane(archieveJTable);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -388,6 +399,10 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         inputRecord.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    TableMethods.loadConfig();
+                } catch (IOException ex) { return; }
+                
                 mainJTable.clearSelection();
                 archieveJTable.clearSelection();
                 
@@ -488,7 +503,9 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             }
         });
     }
-    
+    /**
+     * Setting up the Menu and items
+     */
     private void menuConfig(){
         editMenuPathItem.addMouseListener(new MouseListener(){
             @Override
@@ -505,9 +522,9 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
                     fileChooser.setDialogTitle("Выбор корневого пути");
                     fileChooser.setAcceptAllFileFilterUsed(false);
                     
-                    // выбирать только директории
+                    // select only directories
                     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    // показывать только директории
+                    // show only directories
                     fileChooser.setFileFilter(new FileFilter() {
                         @Override
                         public boolean accept(File f) {
@@ -893,7 +910,6 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     }
     
     /**
-     * 
      * updates the information in the infoArea
      */
     public void updateInfo(){
@@ -915,6 +931,9 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         }
     }
 
+    /**
+     * updating table fields
+     */
     private void updateTable() throws IOException {
         int rowCount = mainJTable.getRowCount();
         
@@ -987,27 +1006,60 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     }
     
     // Getters and Setters are there
+    
+    /**
+     * Selection getter
+     * @return selected row
+     */
     protected int getMainTableSelectedRow() {
         return mainJTable.getSelectedRow();
     }
+    /**
+     * Getter of MainTable row count
+     * @return current count of rows
+     */
     protected int getMainTableRowCount() {
         return mainJTable.getRowCount();
     }
+    /**
+     * Getter of Archieve selection
+     * @return selected row
+     */
     protected int getArchieveTableSelectedRow() {
         return archieveJTable.getSelectedRow();
     }
+    /**
+     * Getter of ArchieveTable row count
+     * @return current count of rows
+     */
     protected int getArchieveTableRowCount() {
         return archieveJTable.getRowCount();
     }
+    /**
+     * Getter for text in the Info area
+     * @return the information text
+     */
     protected String getInfoText() {
         return infoTextArea.getText();
     }
+    /**
+     * Setter for text in the Info area
+     * @param text new Text to set in
+     */
     protected void setInfoText(String text) {
         infoTextArea.setText(text);
     }
+    /**
+     * Getter for TabbedPane
+     * @return current Tab
+     */
     protected int getCurrentTab() {
         return sourceTabbedPane.getSelectedIndex();
     }
+    /**
+     * Setter for TabbedPane
+     * @param mark new tab for the Pane
+     */
     protected void setCurrentTab(int mark) {
         sourceTabbedPane.setSelectedIndex(mark);
     }
@@ -1259,40 +1311,6 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new MainJFrame().setVisible(true);
-//            }
-//        });
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem autofillHelpMenuItem;

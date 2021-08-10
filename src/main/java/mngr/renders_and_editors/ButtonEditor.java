@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr.renders_and_editors;
 
 import mngr.TableMethods;
@@ -22,7 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 
 /**
- *
+ * The class for creating buttons in JTable
  * @author MrUnknown404
  */
 public class ButtonEditor extends DefaultCellEditor {
@@ -32,6 +27,10 @@ public class ButtonEditor extends DefaultCellEditor {
     private boolean isPushed;
     private final Color inactiveColor = Color.LIGHT_GRAY;
 
+    /**
+     * Generator of buttons for JTable
+     * @param checkBox new JCcheckBox
+     */
     public ButtonEditor(JCheckBox checkBox) {
         super(checkBox);
         

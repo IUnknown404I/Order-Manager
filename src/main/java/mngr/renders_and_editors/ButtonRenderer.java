@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr.renders_and_editors;
 
 import mngr.TableMethods;
@@ -17,17 +12,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 /**
- *
+ * The Render class for Active orders' buttons
  * @author MrUnknown404
  */
 public class ButtonRenderer extends JButton implements TableCellRenderer {
     private static final Border IS_FOCUSED = new BevelBorder(1);
     private static final Border OUT_OF_FOCUS = new EmptyBorder(1, 1, 1, 1);
-    
-    public ButtonRenderer(){
-//        setOpaque(true);
-//        setContentAreaFilled(true);
-    }
     
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
@@ -62,6 +52,10 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
         return this;
     }
     
+    /**
+     * Back color setter
+     * @param isSelected boolean is thr row selected 
+     */
     public void setDefaultBackColor(boolean isSelected){
         if(isSelected)
             setBackground(Color.cyan);

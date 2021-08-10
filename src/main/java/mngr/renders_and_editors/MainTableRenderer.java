@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr.renders_and_editors;
 
 import mngr.TableMethods;
@@ -16,7 +11,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- *
+ * The Render class for Active orders' cells
  * @author MrUnknown404
  */
 public class MainTableRenderer extends DefaultTableCellRenderer {
@@ -46,7 +41,7 @@ public class MainTableRenderer extends DefaultTableCellRenderer {
                     setBackground(Color.orange); //банан   255, 255, 153 new Color(250, 231, 182)
                 } else if (daysDif <= 3) {
                     setBackground(new Color(255, 204, 204)); //красный   255, 153, 153
-                } else if (daysDif <= 7) {
+                } else if (daysDif <= 6) {
                     setBackground(new Color(255, 255, 204)); //жёлтый   255, 255, 153
                 } else {
                     setBackground(Color.WHITE);
@@ -69,6 +64,11 @@ public class MainTableRenderer extends DefaultTableCellRenderer {
         return this;
     }
     
+    /**
+     * Getter for formatted text
+     * @param text text to format
+     * @return formatted text
+     */
     private String getFormattedText(String text){
         String formattedText = text;
         return formattedText.replaceAll("\n", " \n");

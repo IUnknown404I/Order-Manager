@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mngr.orders_functional;
 
 import java.io.IOException;
@@ -14,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- *
+ * A Visitor which copies directories with attachments to a new path
  * @author MrUnknown404
  */
 public class DirectoryCopyVisitor extends SimpleFileVisitor<Path> {
@@ -51,12 +46,24 @@ public class DirectoryCopyVisitor extends SimpleFileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
     
+    /**
+     * Getter for new Path
+     * @return new Path
+     */
     public Path getToPath() {
         return toPath;
     }
+    /**
+     * Getter for old Path
+     * @return the old Path
+     */
     public Path getFromPath() {
         return fromPath;
     }
+    /**
+     * Getter for StandardCopyOption
+     * @return current copy option
+     */
     public StandardCopyOption getCopyOption() {
         return copyOption;
     }

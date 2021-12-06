@@ -41,7 +41,7 @@ public class MainTableRenderer extends DefaultTableCellRenderer {
                     setBackground(Color.orange); //банан   255, 255, 153 new Color(250, 231, 182)
                 } else if (daysDif <= 3) {
                     setBackground(new Color(255, 204, 204)); //красный   255, 153, 153
-                } else if (daysDif <= 6) {
+                } else if (daysDif <= 7) {
                     setBackground(new Color(255, 255, 204)); //жёлтый   255, 255, 153
                 } else {
                     setBackground(Color.WHITE);

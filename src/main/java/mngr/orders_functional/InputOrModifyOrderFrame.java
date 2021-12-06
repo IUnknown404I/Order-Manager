@@ -572,9 +572,9 @@ public class InputOrModifyOrderFrame extends JFrame {
             }
             else {
                 StringBuilder builder = new StringBuilder(timeStampYear);
-                builder = builder.replace(builder.length()-1, builder.length(), ""); //YYY# mask for year is ready
+                builder = builder.replace(builder.length()-2, builder.length(), ""); //YYY# mask for year is ready
                 
-                dateFormatter = new MaskFormatter(builder.toString() + "#.##.##");
+                dateFormatter = new MaskFormatter(builder.toString() + "##.##.##");
             }
             
             dateFormatter.setPlaceholderCharacter('0');

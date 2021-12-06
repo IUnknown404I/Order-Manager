@@ -34,7 +34,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="$APPLICATION_HOME_DIR$/plugins/maven/lib/maven3" />
+        <option name="mavenHome" value="E:\programms\IntelliJ IDEA 2020.2.3\plugins\maven\lib\maven3" />
         <option name="outputLevel" value="DEBUG" />
         <option name="usePluginRegistry" value="true" />
       </MavenGeneralSettings>
@@ -89,6 +89,7 @@
       <option name="presentableId" value="Default" />
       <updated>1628167483505</updated>
       <workItem from="1628167485731" duration="6439000" />
+      <workItem from="1638507408829" duration="2138000" />
     </task>
     <servers />
   </component>
@@ -117,39 +118,24 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="712" y="383" key="#Notifications" timestamp="1628167511947">
+    <state width="1877" height="109" key="GridCell.Tab.0.bottom" timestamp="1638528886749">
       <screen x="0" y="40" width="1920" height="1040" />
     </state>
-    <state x="712" y="383" key="#Notifications/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628167511947" />
-    <state x="440" y="134" key="#Project_Structure" timestamp="1628167797025">
+    <state width="1877" height="109" key="GridCell.Tab.0.bottom/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1638528886749" />
+    <state width="1877" height="109" key="GridCell.Tab.0.center" timestamp="1638528886748">
       <screen x="0" y="40" width="1920" height="1040" />
     </state>
-    <state x="440" y="134" key="#Project_Structure/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628167797025" />
-    <state x="740" y="301" key="FileChooserDialogImpl" timestamp="1628230204535">
+    <state width="1877" height="109" key="GridCell.Tab.0.center/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1638528886748" />
+    <state width="1877" height="109" key="GridCell.Tab.0.left" timestamp="1638528886748">
       <screen x="0" y="40" width="1920" height="1040" />
     </state>
-    <state x="740" y="301" key="FileChooserDialogImpl/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628230204535" />
-    <state width="1877" height="360" key="GridCell.Tab.0.bottom" timestamp="1628236511895">
+    <state width="1877" height="109" key="GridCell.Tab.0.left/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1638528886748" />
+    <state width="1877" height="109" key="GridCell.Tab.0.right" timestamp="1638528886748">
       <screen x="0" y="40" width="1920" height="1040" />
     </state>
-    <state width="1877" height="360" key="GridCell.Tab.0.bottom/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628236511895" />
-    <state width="1877" height="360" key="GridCell.Tab.0.center" timestamp="1628236511895">
-      <screen x="0" y="40" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="360" key="GridCell.Tab.0.center/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628236511895" />
-    <state width="1877" height="360" key="GridCell.Tab.0.left" timestamp="1628236511895">
-      <screen x="0" y="40" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="360" key="GridCell.Tab.0.left/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628236511895" />
-    <state width="1877" height="360" key="GridCell.Tab.0.right" timestamp="1628236511895">
-      <screen x="0" y="40" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="360" key="GridCell.Tab.0.right/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628236511895" />
-    <state x="440" y="134" key="SettingsEditor" timestamp="1628230280557">
-      <screen x="0" y="40" width="1920" height="1040" />
-    </state>
-    <state x="440" y="134" key="SettingsEditor/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1628230280557" />
+    <state width="1877" height="109" key="GridCell.Tab.0.right/-1360.590.1360.728/0.40.1920.1040@0.40.1920.1040" timestamp="1638528886748" />
   </component>
 </project>

@@ -22,6 +22,7 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import mngr.orders_functional.DirectoryCopyVisitor;
+import mngr.orders_functional.DirectoryMoveWithDeletingVisitor;
 
 /**
  * Сlass with methods for working with a table and their content
@@ -359,14 +360,167 @@ public class TableMethods {
     }
     
     /**
+     * updating table fields (replace the deprecated orders from actual ones to archive)
+     * @param mainJTable - table of current orders
+     * @param archieveJTable - table of archive orders
+     * @throws java.io.IOException
+     */
+    public static void updateTable(JTable mainJTable, JTable archieveJTable) throws IOException {
+        int rowCount = mainJTable.getRowCount();
+        
+        for (int row=0; row<rowCount; row++, rowCount = mainJTable.getRowCount()) {
+            int trueRowIndex = mainJTable.getRowSorter().convertRowIndexToModel(row);
+            
+            if (TableMethods.getDaysDiff((String) mainJTable.getValueAt(row, 0)) <=-6) { // detecting the necessary row
+                //config .prop file
+                String idProp = mainJTable.getValueAt(row, 0) +" "+ TableMethods.toValidNameFile((String) mainJTable.getValueAt(row, 2));
+                ArrayList<String> propMainText = new ArrayList<>(); //will rewrite actual_cont.prop
+                ArrayList<String> newPropArchieveText = new ArrayList<>(); // will append to archieve_cont.prop
+                //reading
+                try (FileReader fileReader = new FileReader(TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt")) {
+                    Scanner scan = new Scanner(fileReader);
+                    while (scan.hasNextLine()) {
+                        String currentLine = scan.nextLine();
+                        if (currentLine.contains(idProp)) {
+                            newPropArchieveText.add(currentLine); //id
+                            newPropArchieveText.add(scan.nextLine()); //return date
+                            scan.nextLine(); //ignore accept date
+                            newPropArchieveText.add(scan.nextLine()); //customer
+                            currentLine = scan.nextLine();
+                            newPropArchieveText.add(currentLine); //description
+
+                            // moving throught the description to the next order adding the lines to list
+                            while (!currentLine.contains("id") && scan.hasNextLine()) {
+                                currentLine = scan.nextLine();
+                                newPropArchieveText.add(currentLine);
+                            }
+                            if (scan.hasNextLine()) //if not the end of .prop file -> adding id line
+                                propMainText.add(currentLine);
+                        }
+                        else
+                            propMainText.add(currentLine);
+                    }
+                }
+                //re-writing main cont
+                try (FileWriter writer = new FileWriter(TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt")) {
+                    for (String line : propMainText) {
+                        writer.write(line + "\r\n");
+                    }
+                }
+                //appending archieve info to .prop
+                try (FileWriter writer = new FileWriter(TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt", true)) {
+                    for (String line : newPropArchieveText) {
+                        writer.write(line + "\r\n");
+                    }
+                }
+                
+                
+                // deleting files and moving orders
+                String currOrderFileName = mainJTable.getValueAt(row, 0) +" "+ TableMethods.toValidNameFile((String) mainJTable.getValueAt(row, 2));
+                Path oldPathToFile = Path.of(TableMethods.getRootPath().toString() + "\\Текущие заказы", currOrderFileName);
+                Path actualPathToFile = Path.of(TableMethods.getRootPath().toString() + "\\АРХИВ", currOrderFileName);
+                
+                if (Files.exists(oldPathToFile)) {
+                    Files.walkFileTree(oldPathToFile, new DirectoryMoveWithDeletingVisitor(oldPathToFile, actualPathToFile));
+                }
+                
+                // adding to the ArchieveTab
+                ((DefaultTableModel) archieveJTable.getModel()).addRow(new Object[]{
+                    mainJTable.getValueAt(row, 0), mainJTable.getValueAt(row, 2),
+                    mainJTable.getValueAt(row, 3), null});
+                // deleting from MainTab
+                ((DefaultTableModel) mainJTable.getModel()).removeRow(trueRowIndex);
+                
+                row--;
+            }
+        }
+    }
+    
+    /**
+     * replace the deprecated order from actual ones to archive
+     * @param orderRow the deprecated order's row number
+     * @param maintTable mainJTable of actual content
+     * @param archiveTable archiveJTable of archive orders
+     * @throws java.io.IOException
+     */
+    public static void replaceOrderToArchive(int orderRow, JTable maintTable, JTable archiveTable) throws IOException {
+        int trueRowIndex = maintTable.getRowSorter().convertRowIndexToModel(orderRow);
+        
+        //config .prop file
+                String idProp = maintTable.getValueAt(orderRow, 0) +" "+ TableMethods.toValidNameFile((String) maintTable.getValueAt(orderRow, 2));
+                ArrayList<String> propMainText = new ArrayList<>(); //will rewrite actual_cont.prop
+                ArrayList<String> newPropArchieveText = new ArrayList<>(); // will append to archieve_cont.prop
+                //reading
+                try (FileReader fileReader = new FileReader(TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt")) {
+                    Scanner scan = new Scanner(fileReader);
+                    while (scan.hasNextLine()) {
+                        String currentLine = scan.nextLine();
+                        if (currentLine.contains(idProp)) {
+                            newPropArchieveText.add(currentLine); //id
+                            newPropArchieveText.add(scan.nextLine()); //return date
+                            scan.nextLine(); //ignore accept date
+                            newPropArchieveText.add(scan.nextLine()); //customer
+                            currentLine = scan.nextLine();
+                            newPropArchieveText.add(currentLine); //description
+
+                            // moving throught the description to the next order adding the lines to list
+                            while (!currentLine.contains("id") && scan.hasNextLine()) {
+                                currentLine = scan.nextLine();
+                                newPropArchieveText.add(currentLine);
+                            }
+                            if (scan.hasNextLine()) //if not the end of .prop file -> adding id line
+                                propMainText.add(currentLine);
+                        }
+                        else
+                            propMainText.add(currentLine);
+                    }
+                }
+                //re-writing main cont
+                try (FileWriter writer = new FileWriter(TableMethods.getRootPath().toString()+"\\config\\actual_cont.txt")) {
+                    for (String line : propMainText) {
+                        writer.write(line + "\r\n");
+                    }
+                }
+                //appending archieve info to .prop
+                try (FileWriter writer = new FileWriter(TableMethods.getRootPath().toString()+"\\config\\archieve_cont.txt", true)) {
+                    for (String line : newPropArchieveText) {
+                        writer.write(line + "\r\n");
+                    }
+                }
+                
+                // deleting files and moving orders
+                String currOrderFileName = maintTable.getValueAt(orderRow, 0) +" "+ TableMethods.toValidNameFile((String) maintTable.getValueAt(orderRow, 2));
+                Path oldPathToFile = Path.of(TableMethods.getRootPath().toString() + "\\Текущие заказы", currOrderFileName);
+                Path actualPathToFile = Path.of(TableMethods.getRootPath().toString() + "\\АРХИВ", currOrderFileName);
+                
+                if (Files.exists(oldPathToFile)) {
+                    Files.walkFileTree(oldPathToFile, new DirectoryMoveWithDeletingVisitor(oldPathToFile, actualPathToFile));
+                }
+                
+                // adding to the ArchieveTab
+                ((DefaultTableModel) archiveTable.getModel()).addRow(new Object[]{
+                    maintTable.getValueAt(orderRow, 0), maintTable.getValueAt(orderRow, 2),
+                    maintTable.getValueAt(orderRow, 3), null});
+                // deleting from MainTab
+                ((DefaultTableModel) maintTable.getModel()).removeRow(trueRowIndex);
+    }
+    
+    /**
      * Displaying a warning about deleting the selected rows
      * @return JOptionPane OK or CANSEL int result
      */
     public static int getWarningPaneDelete(){
-        Object[] choices = {"Подтвердить", "Отменить"};
+        Object[] choices = {"Удалить", "Отменить"};
         Object defaultChoice = choices[0];
         
         return JOptionPane.showOptionDialog(null, "Вы хотите удалить выделенные поля?","Предупреждение",
+                                                            JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE, null, choices, defaultChoice);
+    }
+    public static int getWarningPaneReplace(){
+        Object[] choices = {"Переместить", "Отменить"};
+        Object defaultChoice = choices[0];
+        
+        return JOptionPane.showOptionDialog(null, "Переместить выделенные поля в архив?","Предупреждение",
                                                             JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE, null, choices, defaultChoice);
     }
     /**
@@ -417,9 +571,9 @@ public class TableMethods {
     public static void setRootPath(String newPath) throws IOException{
         rootPath = Path.of(newPath);
         
-        FileWriter writer = new FileWriter("src\\rootPath.txt");
-        writer.write("rootPath = " + rootPath);
-        writer.close();
+        try (FileWriter writer = new FileWriter("src\\rootPath.txt")) {
+            writer.write("rootPath = " + rootPath);
+        }
     }
     
     /**
@@ -507,33 +661,33 @@ public class TableMethods {
                 if (!configFiles.contains(Path.of(newRootPath.toString()+"\\config\\om.txt"))) {
                     Files.createFile(Path.of(newRootPath.toString()+"\\config\\om.txt"));
                     
-                    FileWriter writer = new FileWriter(newRootPath.toString()+"\\config\\om.txt");
-                    writer.write("rootPath = " + newRootPath.toString() + "\r\n");
-                    writer.write("isAvaible = true\r\n");
-                    writer.write("isModifyingAvaible = true\r\n");
-                    writer.close();
-                } else {
-                    FileReader reader = new FileReader(newRootPath.toString()+"\\config\\om.txt");
-                    Scanner scan = new Scanner(reader);
-                    ArrayList<String> omText = new ArrayList<>();
-                    
-                    while (scan.hasNext())
-                        omText.add(scan.nextLine());
-                    reader.close();
-                    
-                    if (omText.size()==0) {
-                        FileWriter writer = new FileWriter(newRootPath.toString() + "\\config\\om.txt");
+                    try (FileWriter writer = new FileWriter(newRootPath.toString()+"\\config\\om.txt")) {
                         writer.write("rootPath = " + newRootPath.toString() + "\r\n");
                         writer.write("isAvaible = true\r\n");
                         writer.write("isModifyingAvaible = true\r\n");
-                        writer.close();
+                    }
+                } else {
+                    ArrayList<String> omText;
+                    try (FileReader reader = new FileReader(newRootPath.toString()+"\\config\\om.txt")) {
+                        Scanner scan = new Scanner(reader);
+                        omText = new ArrayList<>();
+                        while (scan.hasNext())
+                            omText.add(scan.nextLine());
+                    }
+                    
+                    if (omText.isEmpty()) {
+                        try (FileWriter writer = new FileWriter(newRootPath.toString() + "\\config\\om.txt")) {
+                            writer.write("rootPath = " + newRootPath.toString() + "\r\n");
+                            writer.write("isAvaible = true\r\n");
+                            writer.write("isModifyingAvaible = true\r\n");
+                        }
                     } else {
                         omText.remove(0);
-                        FileWriter writer = new FileWriter(newRootPath.toString()+"\\config\\om.txt");
-                        writer.write("rootPath = " + newRootPath.toString() + "\r\n");
-                        for (String line:omText)
-                            writer.write(line +"\r\n");
-                        writer.close();
+                        try (FileWriter writer = new FileWriter(newRootPath.toString()+"\\config\\om.txt")) {
+                            writer.write("rootPath = " + newRootPath.toString() + "\r\n");
+                            for (String line:omText)
+                                writer.write(line +"\r\n");
+                        }
                     }
                     
                     if (Files.exists(Path.of(newRootPath.toString()+"\\config\\dump")))
@@ -709,7 +863,7 @@ public class TableMethods {
         }
         
         if (isAvaible)
-            // mark .prop as *in using*
+            // mark .prop as free for use
             try ( FileWriter avaibilityWriter = new FileWriter(getRootPath().toString()+"\\config\\om.txt")) {
                 for (String line:propText) {
                     if (line.contains("isModifyingAvaible"))
@@ -718,7 +872,7 @@ public class TableMethods {
                 }
             }
         else
-            // mark .prop as free for use
+            // mark .prop as *in using*
             try ( FileWriter avaibilityWriter = new FileWriter(getRootPath().toString()+"\\config\\om.txt")) {
                 for (String line:propText) {
                     if (line.contains("isModifyingAvaible"))
@@ -726,5 +880,34 @@ public class TableMethods {
                     avaibilityWriter.write(line+"\r\n");
                 }
             }
+    }
+    
+    /**
+     * A method that reset the main-table selection interval
+     * @param table main-table of actual orders
+     * @param shouldClear boolean check for full-clear or reset (restore the previous selected row)
+     */
+    public static void resetSelection(JTable table, boolean shouldClear) {
+        try {
+            int selectedRow = 0;
+            int selectedColumn = 0;
+//            if(!shouldClear && table.getSelectedRowCount() > 0) {
+            if(!shouldClear) {
+                selectedRow = table.getSelectedRow();
+                selectedColumn = table.getSelectedColumn();
+            }
+            
+            table.setRowSelectionInterval(0, 0);
+            table.setColumnSelectionInterval(0, 0);
+            table.setRowSelectionInterval(table.getRowCount() - 1, table.getRowCount() - 1);
+            table.setColumnSelectionInterval(table.getColumnCount() - 1, table.getColumnCount() - 1);
+            table.clearSelection();
+            
+//            if(!shouldClear && table.getSelectedRowCount() > 0) {
+            if(!shouldClear) {
+                table.setRowSelectionInterval(selectedRow, selectedRow);
+                table.setColumnSelectionInterval(selectedColumn, selectedColumn);
+            }
+        } catch (IllegalArgumentException  ignored) {}
     }
 }

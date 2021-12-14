@@ -13,20 +13,19 @@ import mngr.renders_and_editors.MainTableRenderer;
 import mngr.renders_and_editors.ArchiveTableRender;
 import mngr.renders_and_editors.ArchiveTableButtonRender;
 import mngr.orders_functional.InputOrModifyOrderFrame;
-import mngr.orders_functional.DirectoryMoveWithDeletingVisitor;
 import mngr.orders_functional.DirectoryCopyVisitor;
 
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileSystemException;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -57,10 +55,10 @@ import javax.swing.SortOrder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import mngr.orders_functional.EditPopup;
 
 /**
  *
@@ -75,11 +73,104 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             initOtherComponents();
             DataFilling.tableFilling(mainJTable, archieveJTable);
             updateInfo();
+<<<<<<< Updated upstream
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "        В директории по корневому пути не найдено всех нужных системных файлов!\n"
                             + "Восстановите их перед началом работы или укажите новый корневой путь для работы!","Системное уведомление", JOptionPane.ERROR_MESSAGE);
         }
 
+=======
+            
+        } catch (NoSuchFileException | FileNotFoundException ex) { Logger.getLogger(TableMethods.class.getName()).log(Level.SEVERE, null, ex); }
+        
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                TableMethods.resetSelection(mainJTable, false);
+            }
+        });
+        mainJTable.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                TableMethods.resetSelection(mainJTable, false);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                TableMethods.resetSelection(mainJTable, false);
+            }
+        });
+        mainJTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    try {
+                        if (!TableMethods.isModifyingAvaible()) {
+                            TableMethods.getAvaibleErrorPane();
+                            return;
+                        }
+                        mainJTable.clearSelection();
+                        TableMethods.setModifyingAvaibleMark(false);
+                        
+                        Point point = e.getPoint();
+                        int selectedToMoveRow = mainJTable.rowAtPoint(point);
+                        int selectedToMoveColumn = mainJTable.columnAtPoint(point);
+                        mainJTable.setRowSelectionInterval(selectedToMoveRow, selectedToMoveRow);
+                        mainJTable.setColumnSelectionInterval(selectedToMoveColumn, selectedToMoveColumn);
+                            
+                        EditPopup popup  = new EditPopup(mainJTable, archieveJTable);
+                        popup.show((JTable)e.getSource(), e.getX(), e.getY());
+                        
+                        TableMethods.setModifyingAvaibleMark(true);
+                        
+                    } catch (IOException | IllegalArgumentException  ex) {
+                        try {
+                            TableMethods.setModifyingAvaibleMark(true);
+                            Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex1) { Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex1); }
+                    } finally {
+                        try {
+                            TableMethods.setModifyingAvaibleMark(true);
+                        } catch (IOException ex) { Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex); }
+                    }
+                }
+            }
+        });
+        mainJTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (mainJTable.rowAtPoint(e.getPoint()) == -1) {
+                    TableMethods.resetSelection(mainJTable, true);
+                } 
+                else {
+                    TableMethods.resetSelection(mainJTable, false);
+                }
+            }
+        });
+        infoTextArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                TableMethods.resetSelection(mainJTable, true);
+            }
+        });
+        sourcePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                TableMethods.resetSelection(mainJTable, true);
+            }
+        });
+        toolsPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                TableMethods.resetSelection(mainJTable, true);
+            }
+        });
+        sourceTabbedPane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                TableMethods.resetSelection(mainJTable, true);
+            }
+        });
+>>>>>>> Stashed changes
     }
     private void initOtherComponents(){
         infoTextArea.setFont(new Font(inputRecord.getFont().getName(),Font.PLAIN, 13));
@@ -101,43 +192,8 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         // инициирую и настраиваю таблицу
         mainJTable = new JTable();
         mainJTable.setName("MainTable");
-        mainJTable.addFocusListener(new FocusListener(){
-            @Override
-            public void focusGained(FocusEvent e) {
-//                mainJTable.clearSelection();
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
         mainJTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-//            {"2021.07.26", "1998.06.10", "ООО \"Красный ООО\"", "Поставка в Владивосток, разговаривать с тем-то, делать то-то, да и вообще в описании побольше писать", null},
-//            {"2021.08.28", "1998.06.10", "Иван степаныч", "Это работа\nИвана\nСтепаныча", null},
-//            {"2021.07.29", "1998.06.10", "Первый дед", "Это работа\nПервого\nдеда", null},
-//            {"2021.07.30", "1998.06.10", "Второй дед", "this is demo presentation", null},
-//            {"2021.08.03", "1998.06.10", "Дед третий", "Mngr", null},
-//            {"2021.08.05", "1998.06.10", "Красный куб", "Mngr", null},
-//            {"2022 08 06", "1998.06.10", "Акула", "###################\n" +
-//"TEST###################", null},
-//            {"2022 08 24", "1998.06.10", "Лента", "Mngr", null},
-//            {"2022 08 29", "1998.06.10", "Владивосток", "Mngr", null},
-//            {"2022 08 15", "1998.06.10", "Sheeeesh", "\nDo u know what does it's mean, brah?\n", null},
-//            {"2022 08 01", "1998.06.10", "Kasha", "This is Kasha maaan", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-//            {"2022 08 31", "1998.06.10", "Kolyan", "Mngr", null},
-            },
+            new Object [][] {},
             new String [] {"Срок сдачи", "Поступление", "Заказчик", "Описание", "Директория"}) {
 
             Class[] types = new Class [] {
@@ -215,6 +271,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         JScrollPane scroll = new JScrollPane(mainJTable);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
         sourceTabbedPane.addTab("  Текущие проекты  ", scroll);
     }
     
@@ -229,15 +286,11 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
 
             @Override
             public void focusLost(FocusEvent e) {
-                mainJTable.clearSelection();
+                archieveJTable.clearSelection();
             }
         });
         archieveJTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-//            {"2021.05.29", "wwwww", "aaaaaaaaaa", null},
-//            {"2021.04.25", "222222", "ssssssss", null},
-//            {"2021.06.01", "s33333", "bbbbbbbb", null},
-            },
+            new Object [][] {},
             new String [] {"Срок сдачи","Заказчик", "Описание", "Директория"}) {
 
             Class[] types = new Class [] {
@@ -320,7 +373,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     private void tabbedPaneConfig(){
         sourceTabbedPane.addChangeListener((ChangeEvent e) -> {
             updateInfo();
-            mainJTable.clearSelection();
+            TableMethods.resetSelection(mainJTable, true);
             archieveJTable.clearSelection();
         });
     }
@@ -332,11 +385,16 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 try {
+<<<<<<< Updated upstream
                     updateTable();
+=======
+                    DataFilling.tableFilling(mainJTable, archieveJTable);
+//                    updateTable();
+>>>>>>> Stashed changes
                     updateInfo();
                     DataFilling.tableFilling(mainJTable, archieveJTable);
                 } 
@@ -366,14 +424,22 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
                         new InputOrModifyOrderFrame(MainJFrame.this, mainJTable, mainJTable.getSelectedRow());
                 }
                 
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
             }
         });
         inputRecord.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+<<<<<<< Updated upstream
                 mainJTable.clearSelection();
+=======
+                try {
+                    TableMethods.loadConfig();
+                } catch (IOException ex) { return; }
+                
+                TableMethods.resetSelection(mainJTable, true);
+>>>>>>> Stashed changes
                 archieveJTable.clearSelection();
                 
                 InputOrModifyOrderFrame inputFrame;
@@ -458,7 +524,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
                         }
                     }
                     
-                    mainJTable.clearSelection();
+                    TableMethods.resetSelection(mainJTable, true);
                     archieveJTable.clearSelection();
                     
                     updateInfo();
@@ -466,7 +532,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
                     mainJTable.clearSelection();
                     archieveJTable.clearSelection();
                 } catch (IOException ex) {
-                    mainJTable.clearSelection();
+                    TableMethods.resetSelection(mainJTable, true);
                     archieveJTable.clearSelection();
                     Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -478,7 +544,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         editMenuPathItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 try {
@@ -533,7 +599,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         dumpUpdateMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 try {
@@ -584,7 +650,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         dumpCleanMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 try {
@@ -646,11 +712,11 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         recoverPropMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 try {
-                    Object[] choices = {"Подтвердить", "Отменить"};
+                    Object[] choices = {"Восстановить", "Отменить"};
                     Object defaultChoice = choices[0];
                     int selected = JOptionPane.showOptionDialog(null, "Вы хотите очистить текущие системные файлы, после чего \n"
                                         + "               восстановить их из резервых данных.\n"
@@ -708,10 +774,45 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             }
         });
         
+        replaceAllDeprecated.addMouseListener(new MouseListener(){
+            @Override
+            public void mousePressed(MouseEvent e) {
+                try {
+                    TableMethods.resetSelection(mainJTable, true);
+                    archieveJTable.clearSelection();
+                    TableMethods.setModifyingAvaibleMark(false);
+                    
+                    Object[] choices = {"Перенести", "Отменить"};
+                    Object defaultChoice = choices[0];
+                    int select = JOptionPane.showOptionDialog(null, "Перенести ВСЕ просроченные проекты из текущих в архив?", "Предупреждение", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE, null, choices, defaultChoice);
+                    if(select == JOptionPane.YES_OPTION) {
+                        try {
+                            TableMethods.updateTable(mainJTable, archieveJTable);
+                        } catch (IOException ex) { Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex); }
+                    }
+                    
+                    TableMethods.setModifyingAvaibleMark(true);
+                } catch (IOException ex) { Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex); }
+            }
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+        
         propFromTablesUpdateMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 try {
@@ -755,7 +856,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         defaultHelpMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 HelpFrame helpFrame = new HelpFrame(0);
@@ -779,7 +880,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         menuFunctionalHelpMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 HelpFrame helpFrame = new HelpFrame(1);
@@ -803,7 +904,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         filesWorkHelpMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 HelpFrame helpFrame = new HelpFrame(2);
@@ -827,7 +928,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         errorHelpMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 HelpFrame helpFrame = new HelpFrame(3);
@@ -851,7 +952,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         autofillHelpMenuItem.addMouseListener(new MouseListener(){
             @Override
             public void mousePressed(MouseEvent e) {
-                mainJTable.clearSelection();
+                TableMethods.resetSelection(mainJTable, true);
                 archieveJTable.clearSelection();
                 
                 HelpFrame helpFrame = new HelpFrame(4);
@@ -895,6 +996,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             default -> { setInfoText(""); }
         }
     }
+<<<<<<< Updated upstream
 
     private void updateTable() throws IOException {
         int rowCount = mainJTable.getRowCount();
@@ -966,6 +1068,8 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             }
         }
     }
+=======
+>>>>>>> Stashed changes
     
     // Getters and Setters are there
     protected int getMainTableSelectedRow() {
@@ -1023,6 +1127,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         dumpMenu = new javax.swing.JMenu();
         dumpUpdateMenuItem = new javax.swing.JMenuItem();
         dumpCleanMenuItem = new javax.swing.JMenuItem();
+        replaceAllDeprecated = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         defaultHelpMenuItem = new javax.swing.JMenuItem();
         menuFunctionalHelpMenuItem = new javax.swing.JMenuItem();
@@ -1084,7 +1189,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
             .addGroup(toolsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(toolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(infoTextArea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                    .addComponent(infoTextArea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(toolsPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(toolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1182,6 +1287,10 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
         dumpMenu.add(dumpCleanMenuItem);
 
         editMenu.add(dumpMenu);
+
+        replaceAllDeprecated.setText("Перенести всю задержку в архив");
+        replaceAllDeprecated.setPreferredSize(new java.awt.Dimension(220, 26));
+        editMenu.add(replaceAllDeprecated);
 
         menu.add(editMenu);
 
@@ -1295,6 +1404,7 @@ public class MainJFrame extends javax.swing.JFrame implements Serializable {
     private javax.swing.JButton modifyButton;
     private javax.swing.JMenuItem propFromTablesUpdateMenuItem;
     private javax.swing.JMenuItem recoverPropMenuItem;
+    private javax.swing.JMenuItem replaceAllDeprecated;
     private javax.swing.JPanel sourcePanel;
     // private JScrollPane jsp;
     private javax.swing.JTabbedPane sourceTabbedPane;

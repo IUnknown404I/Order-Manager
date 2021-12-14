@@ -109,6 +109,14 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <MenuItem class="javax.swing.JMenuItem" name="replaceAllDeprecated">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x41f;&#x435;&#x440;&#x435;&#x43d;&#x435;&#x441;&#x442;&#x438; &#x432;&#x441;&#x44e; &#x437;&#x430;&#x434;&#x435;&#x440;&#x436;&#x43a;&#x443; &#x432; &#x430;&#x440;&#x445;&#x438;&#x432;"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[220, 26]"/>
+                </Property>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="helpMenu">
